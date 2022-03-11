@@ -5,9 +5,9 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 // load web3js to create transactions
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3.min.js" }));
 // uncomment to enable torus wallet
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@toruslabs/torus-embed" }));
+document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@toruslabs/torus-embed" }));
 // uncomment to enable walletconnect
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
+document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
 
 // load web3gl to connect to unity
 window.web3gl = {
@@ -33,15 +33,15 @@ window.web3gl.connect()
 async function connect() {
   // uncomment to enable torus and walletconnect
   const providerOptions = {
-    // torus: {
-    //   package: Torus,
-    // },
-    // walletconnect: {
-    //   package: window.WalletConnectProvider.default,
-    //   options: {
-    //     infuraId: "00000000000000000000000000000000",
-    //   },
-    // },
+    torus: {
+      package: Torus,
+    },
+    walletconnect: {
+      package: window.WalletConnectProvider.default,
+      options: {
+        infuraId: "23ef24f312f14260ac29b7370a506f15",
+      },
+    },
   };
 
   const web3Modal = new window.Web3Modal.default({
@@ -70,7 +70,9 @@ async function connect() {
   }
 
   // set current account
-  web3gl.connectAccount = provider.selectedAddress;
+  // provider.selectedAddress works for metamask and torus
+  // provider.accounts[0] works for walletconnect
+  web3gl.connectAccount = provider.selectedAddress || provider.accounts[0];
 
   // refresh page if player changes account
   provider.on("accountsChanged", (accounts) => {
